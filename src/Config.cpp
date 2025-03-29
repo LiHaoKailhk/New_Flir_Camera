@@ -45,8 +45,8 @@ bool Config::load_config(const string& config_file) {
             filesystem::create_directories(file_path);
             //在文件路径下创建Heart-Img文件夹
             filesystem::create_directories(file_path + "/Heart-Img");
-            //在Heart-Img文件夹下创建Calibration文件夹
-            filesystem::create_directories(file_path + "/Heart-Img/Calibration");
+            //在文件路径下创建Calibration文件夹
+            filesystem::create_directories(file_path + "/Calibration");
         }
 
         return true;

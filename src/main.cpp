@@ -13,8 +13,12 @@ using namespace std;
 
 void showMenu(Config _config) {
     cout << "\n=== 图像采集系统 ===" << "   当前状态： "<< _config.chosen_operation << endl;
-    cout << "1. 单次批量采集" << endl;
-    cout << "2. 连续定时采集" << endl;
+    cout << "1. 单次批量采集   (get " 
+        << _config.HeartImg_image_number 
+        << " frames by "
+        << _config.Image_acquisition_Hz
+        << " Hz)" << endl;
+    cout << "2. 连续定时采集 (每次采集张数默认为一半）" << endl;
     cout << "3. 退出程序" << endl;
     cout << "请选择操作: ";
 }

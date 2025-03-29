@@ -20,6 +20,10 @@ public:
     int Calibration_image_number;
     int HeartImg_image_number;
 
+    //采集频率
+    int Image_acquisition_Hz = 50;
+    int Calibration_acquisition_Hz = 2;
+
 private:
     nlohmann::json _json_config;
 };

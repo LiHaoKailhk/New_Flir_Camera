@@ -2,11 +2,13 @@
   "exposure_time": 350,
   "Calibration_image_number": 20,
   "HeartImg_image_number": 500,
-  "file_path": "F:/test/2024.3.8/",
+  "file_path": "F:/test/2024.3.29/",
   "chosen_trigger": "HARDWARE",
   "chosen_operation": "HeartImg",
-  "serial_port": "COM4",
+  "serial_port": "COM5",
   "baud_rate": 9600,
   "left_camera_id": "20424017",
-  "right_camera_id": "21104841"
-}
+  "right_camera_id": "21104841",
+  "Image_acquisition_Hz": 50,
+  "Calibration_acquisition_Hz": 2
+} 

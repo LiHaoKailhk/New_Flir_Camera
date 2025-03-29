@@ -155,9 +155,9 @@ bool ImageAcquisition::MultipleAcquisition(CameraList cameras)
             } else {
                 Sleep(1000);
                 if (_config.chosen_operation == "Calibration") {
-                    serialPort.sendFrequency(2); // 发送50Hz的频率
+                    serialPort.sendFrequency(_config.Calibration_acquisition_Hz); // 发送2Hz的频率
                 } else if (_config.chosen_operation == "HeartImg") {
-                    serialPort.sendFrequency(50); // 发送100Hz的频率
+                    serialPort.sendFrequency(_config.Image_acquisition_Hz); // 发送50Hz的频率
                 }
                 Sleep(200);
                 string _result = serialPort.readData();
