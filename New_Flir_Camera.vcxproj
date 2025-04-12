@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -142,6 +142,7 @@ SpinVideo_v140.lib
     <ClCompile Include="src\ImageAcquisition.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\SerialPort.cpp" />
+    <ClCompile Include="src\TCPClient.cpp" />
     <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -150,6 +151,7 @@ SpinVideo_v140.lib
     <ClInclude Include="include\ErrorHandler.h" />
     <ClInclude Include="include\ImageAcquisition.h" />
     <ClInclude Include="include\SerialPort.h" />
+    <ClInclude Include="include\TCPClient.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config\config.json" />

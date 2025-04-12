@@ -32,19 +32,22 @@ bool Config::load_config(const string& config_file) {
         left_camera_id = _json_config["left_camera_id"];
         right_camera_id = _json_config["right_camera_id"];
         Calibration_image_number = _json_config["Calibration_image_number"];
-        HeartImg_image_number = _json_config["HeartImg_image_number"];
+        Acquisition_image_number = _json_config["Acquisition_image_number"];
+
+        Acquisition_Hz = _json_config["Acquisition_Hz"];
+        Calibration_Hz = _json_config["Calibration_Hz"];
 
         // 检查路径是否完整存在
         //如果路径不存在，则创建路径
         //file_path
-        //file_path/Heart-Img
+        //file_path/Acquisition
         //file_path/Calibration
         if (!filesystem::exists(file_path)) {
             cerr << "文件路径不存在: " << file_path << endl;
             //如果路径不存在，则创建路径
             filesystem::create_directories(file_path);
-            //在文件路径下创建Heart-Img文件夹
-            filesystem::create_directories(file_path + "/Heart-Img");
+            //在文件路径下创建Acquisition文件夹
+            filesystem::create_directories(file_path + "/Acquisition");
             //在文件路径下创建Calibration文件夹
             filesystem::create_directories(file_path + "/Calibration");
         }

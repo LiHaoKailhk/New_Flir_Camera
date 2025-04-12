@@ -137,38 +137,90 @@ bool ImageAcquisition::SingleAcquisition_RAM(CameraPtr pCam)
     }
 }
 
-// MultipleAcquisition的实现可以使用OpenMP进行并行处理
 bool ImageAcquisition::MultipleAcquisition(CameraList cameras)
 {
     try {
         SetImageNumber();
-        int camListSize = cameras.GetSize();      
-        SerialPort serialPort(_config.serial_port, _config.baud_rate);
-        serialPort.sendFrequency(0);
-        Sleep(500);
+        int camListSize = cameras.GetSize();
+        SerialPort* serialPort = nullptr;  // 在外部声明指针
+        TCPClient* client = nullptr;
+
+        if (_config.Use_WIFI_Trigger) {
+            // 使用无线串口进行通信
+            // 服务器IP和端口需与服务端（比如Pico端）设置一致
+            client = new TCPClient("192.168.42.1", 4242);
+            client->connectToServer();
+        }
+        else {
+            // 使用有线串口进行通信
+            serialPort = new SerialPort(_config.serial_port, _config.baud_rate);  // 动态分配
+            serialPort->sendFrequency(0);
+            Sleep(500);
+        }
+
         string result;
 
 #pragma omp parallel for 
+        //构建相机数量+1个for循环，前两个给相机，最后一个给单片机
         for (int i = 0; i < camListSize + 1; i++) {
             if (i < camListSize) {
+                //相机的循环体
                 SingleAcquisition_RAM(cameras.GetByIndex(i));
-            } else {
-                Sleep(1000);
-                if (_config.chosen_operation == "Calibration") {
-                    serialPort.sendFrequency(_config.Calibration_acquisition_Hz); // 发送2Hz的频率
-                } else if (_config.chosen_operation == "HeartImg") {
-                    serialPort.sendFrequency(_config.Image_acquisition_Hz); // 发送50Hz的频率
+            }
+            else {
+                Sleep(1000);            //要等待前两个相机的初始化
+                if (!_config.Use_WIFI_Trigger & serialPort != nullptr) {
+                    if (_config.chosen_operation == "Calibration") {
+                        serialPort->sendFrequency(_config.Calibration_Hz); // 发送2Hz的频率
+                    }
+                    else if (_config.chosen_operation == "Acquisition") {
+                        serialPort->sendFrequency(_config.Acquisition_Hz); // 发送50Hz的频率
+                    }
+                    Sleep(200);
+                    string _result = serialPort->readData();
+                    cout << _result << endl;
                 }
-                Sleep(200);
-                string _result = serialPort.readData();
-                cout << _result << endl;
+                else if (_config.Use_WIFI_Trigger & client != nullptr) {
+                    if (_config.chosen_operation == "Calibration") {
+                        client->sendData(to_string(_config.Calibration_Hz)); // 发送2Hz的频率
+                    }
+                    else if (_config.chosen_operation == "Acquisition") {
+                        client->sendData(to_string(_config.Acquisition_Hz)); // 发送50Hz的频率
+                    }
+                    std::string response = client->receiveData();
+                    if (!response.empty()) {
+                        std::cout << "Server responded: " << response << std::endl;
+                    }
+                    else {
+                        std::cout << "No response from server." << std::endl;
+                    }
+                }
+                else
+                    cout << "无合适的触发方式，检查无线或有线串口"<< endl;
             }
         }
 
-        serialPort.sendFrequency(0);
-        Sleep(200);
-        result = serialPort.readData();
-        cout << result << endl;
+        if (serialPort) {  // 确保serialPort不为空
+            serialPort->sendFrequency(0);
+            Sleep(200);
+            result = serialPort->readData();
+            cout << result << endl;
+
+            delete serialPort;  // 释放动态分配的内存
+        }
+        if (client) {
+            client->sendData(to_string(0));
+            std::string response = client->receiveData();
+            if (!response.empty()) {
+                std::cout << "Server responded: " << response << std::endl;
+            }
+            else {
+                std::cout << "No response from server." << std::endl;
+            }
+            client->disconnect();
+
+            delete client;
+        }
 
         return true;
     }
@@ -241,7 +293,7 @@ bool ImageAcquisition::ContinuousAcquisition(CameraList cameras) {
 void ImageAcquisition::saveImageToDisk() {
     assert(_leftImages.size() == _rightImages.size());
 
-    //图像储存逻辑为：_config.file_path下Heart-Img文件夹内储存，每次采集后，在Heart-Img文件夹内创建一个以当前"日期-时间戳"命名的文件夹，将图像保存到该文件夹内
+    //图像储存逻辑为：_config.file_path下Acquisition文件夹内储存，每次采集后，在Acquisition文件夹内创建一个以当前"日期-时间戳"命名的文件夹，将图像保存到该文件夹内
     //获得日期+小时+分钟+秒
     time_t now = time(0);
     tm *ltm = localtime(&now);
@@ -251,8 +303,8 @@ void ImageAcquisition::saveImageToDisk() {
     string folder_name;
     if (_config.chosen_operation == "Calibration") {
         folder_name = _config.file_path + "Calibration/" + date + "-" + time;
-    } else if (_config.chosen_operation == "HeartImg") {
-        folder_name = _config.file_path + "Heart-Img/" + date + "-" + time + "-" + number;
+    } else if (_config.chosen_operation == "Acquisition") {
+        folder_name = _config.file_path + "Acquisition/" + date + "-" + time + "-" + number;
     }
     mkdir(folder_name.c_str());
 
@@ -279,11 +331,11 @@ void ImageAcquisition::saveImageToDisk() {
 void ImageAcquisition::SetImageNumber() {
     if (_config.chosen_operation == "Calibration") {
         _image_number = _config.Calibration_image_number;
-    } else if (_config.chosen_operation == "HeartImg") {
+    } else if (_config.chosen_operation == "Acquisition") {
         if (_acquisitionMode == AcquisitionMode::SINGLE_BATCH) {
-            _image_number = _config.HeartImg_image_number;
+            _image_number = _config.Acquisition_image_number;
         } else if (_acquisitionMode == AcquisitionMode::CONTINUOUS) {
-            _image_number = int(_config.HeartImg_image_number / 2);         // 连续采集时，采集次数减半
+            _image_number = int(_config.Acquisition_image_number / 2);         // 连续采集时，采集次数减半
         }
     }
 }

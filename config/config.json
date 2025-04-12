@@ -1,14 +1,26 @@
 {
-  "exposure_time": 350,
-  "Calibration_image_number": 20,
-  "HeartImg_image_number": 500,
-  "file_path": "F:/test/2024.3.29/",
-  "chosen_trigger": "HARDWARE",
-  "chosen_operation": "HeartImg",
-  "serial_port": "COM5",
-  "baud_rate": 9600,
+  "-------------------block-------------------": "相机参数",
   "left_camera_id": "20424017",
   "right_camera_id": "21104841",
-  "Image_acquisition_Hz": 50,
-  "Calibration_acquisition_Hz": 2
+
+  "exposure_time": 350,
+
+  "Calibration_Hz": 2,
+  "Calibration_image_number": 20,
+  "Acquisition_Hz": 50,
+  "Acquisition_image_number": 500,
+
+
+  "-------------------block-------------------": "图像保存",
+  "file_path": "F:/test/2024.4.12/",
+  "?_chosen_operation": "Calibration or Acquisition",
+  "chosen_operation": "Acquisition",
+
+
+  "-------------------block-------------------": "触发设置",
+  "chosen_trigger": "HARDWARE",
+  "Use_WIFI_Trigger": true,
+  "baud_rate": 9600,
+  "serial_port": "COM5"
+
 } 

@@ -6,6 +6,7 @@
 #include <vector>
 #include "Config.h"
 #include "CameraController.h"
+#include "TCPClient.h"
 
 
 using namespace Spinnaker;
