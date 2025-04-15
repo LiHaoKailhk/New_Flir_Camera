@@ -8,7 +8,7 @@
   "Calibration_Hz": 2,
   "Calibration_image_number": 20,
   "Acquisition_Hz": 50,
-  "Acquisition_image_number": 500,
+  "Acquisition_image_number": 50,
 
 
   "-------------------block-------------------": "图像保存",

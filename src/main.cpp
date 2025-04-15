@@ -27,6 +27,7 @@ void showMenu(Config _config) {
 }
 
 int main(int /*argc*/, char** /*argv*/) {
+
     try {
         // 初始化系统
         SystemPtr system = System::GetInstance();

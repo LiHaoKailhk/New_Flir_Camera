@@ -162,13 +162,17 @@ bool ImageAcquisition::MultipleAcquisition(CameraList cameras)
             client = new TCPClient("192.168.42.1", 4242);
             client->connectToServer();
             client->sendData("0\n");
-            std::string response = client->receiveData();
-            if (!response.empty()) {
-                std::cout << "Server responded: " << response << std::endl;
-            }
-            else {
-                std::cout << "No response from server." << std::endl;
-            }
+            Sleep(250);
+            while (true) {
+                std::string response = client->receiveData();
+                if (!response.empty()) {
+                    std::cout << "Server responded: " << response << std::endl;
+                    break;
+                }
+                else {
+                    std::cout << "No response from server." << std::endl;
+                }
+            }    
         }
         else {
             // 使用有线串口进行通信
@@ -205,14 +209,18 @@ bool ImageAcquisition::MultipleAcquisition(CameraList cameras)
                     else if (_config.chosen_operation == "Acquisition") {
                         client->sendData(to_string(_config.Acquisition_Hz) + "\n"); // 发送50Hz的频率
                     }
-                    std::string response = client->receiveData();
-                    cout << "response " << endl;
-                    if (!response.empty()) {
-                        std::cout << "Server responded: " << response << std::endl;
+                    while (true) {
+                        std::string response = client->receiveData();
+                        //cout << "response " << endl;
+                        if (!response.empty()) {
+                            std::cout << "Server responded: " << response << std::endl;
+                            break;
+                        }
+                        else {
+                            std::cout << "No response from server." << std::endl;
+                        }
                     }
-                    else {
-                        std::cout << "No response from server." << std::endl;
-                    }
+                    
                 }
                 else
                     cout << "无合适的触发方式，检查无线或有线串口"<< endl;
@@ -230,11 +238,14 @@ bool ImageAcquisition::MultipleAcquisition(CameraList cameras)
         if (client) {
             client->sendData(to_string(0) + "\n");
             std::string response = client->receiveData();
-            if (!response.empty()) {
-                std::cout << "Server responded: " << response << std::endl;
-            }
-            else {
-                std::cout << "No response from server." << std::endl;
+            while (true) {
+                if (!response.empty()) {
+                    std::cout << "Server responded: " << response << std::endl;
+                    break;
+                }
+                else {
+                    std::cout << "No response from server." << std::endl;
+                }
             }
             client->disconnect();
 
@@ -328,6 +339,9 @@ void ImageAcquisition::saveImageToDisk() {
     //mkdir(folder_name.c_str());
     cout << folder_name.c_str() << endl;
     filesystem::create_directories(folder_name.c_str());
+
+    //保存config.json
+    filesystem::copy_file("./config/config.json", folder_name + "/config.json");
 
     // 创建文件夹CameraL和CameraR
     string cameraL_folder = folder_name + "/CameraL";
