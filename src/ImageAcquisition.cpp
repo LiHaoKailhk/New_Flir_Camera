@@ -158,9 +158,10 @@ bool ImageAcquisition::MultipleAcquisition(CameraList cameras)
         if (_config.Use_WIFI_Trigger) {
             // 使用无线串口进行通信
             // 服务器IP和端口需与服务端（比如Pico端）设置一致
+            cout << "TCP" << endl;
             client = new TCPClient("192.168.42.1", 4242);
             client->connectToServer();
-            client->sendData("0");
+            client->sendData("0\n");
             std::string response = client->receiveData();
             if (!response.empty()) {
                 std::cout << "Server responded: " << response << std::endl;
@@ -175,9 +176,6 @@ bool ImageAcquisition::MultipleAcquisition(CameraList cameras)
             serialPort->sendFrequency(0);
             Sleep(500);
         }
-
-
-
         string result;
 
 #pragma omp parallel for 
@@ -202,12 +200,11 @@ bool ImageAcquisition::MultipleAcquisition(CameraList cameras)
                 }
                 else if (_config.Use_WIFI_Trigger & client != nullptr) {
                     if (_config.chosen_operation == "Calibration") {
-                        client->sendData(to_string(_config.Calibration_Hz)); // 发送2Hz的频率
+                        client->sendData(to_string(_config.Calibration_Hz) + "\n"); // 发送2Hz的频率
                     }
                     else if (_config.chosen_operation == "Acquisition") {
-                        client->sendData(to_string(_config.Acquisition_Hz)); // 发送50Hz的频率
+                        client->sendData(to_string(_config.Acquisition_Hz) + "\n"); // 发送50Hz的频率
                     }
-                    cout << "send! " << endl;
                     std::string response = client->receiveData();
                     cout << "response " << endl;
                     if (!response.empty()) {
@@ -231,7 +228,7 @@ bool ImageAcquisition::MultipleAcquisition(CameraList cameras)
             delete serialPort;  // 释放动态分配的内存
         }
         if (client) {
-            client->sendData(to_string(0));
+            client->sendData(to_string(0) + "\n");
             std::string response = client->receiveData();
             if (!response.empty()) {
                 std::cout << "Server responded: " << response << std::endl;

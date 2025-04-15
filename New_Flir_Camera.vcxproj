@@ -44,8 +44,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -110,7 +110,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Link>
-      <AdditionalDependencies>Spinnaker_v140.lib;Spinnakerd_v140.lib;SpinnakerC_v140.lib;SpinnakerCd_v140.lib;SpinnakerGUI_WPF_v140.lib;SpinnakerGUI_WPFd_v140.lib;SpinnakerGUISelector_WPF_v140.lib;SpinUpdate_v140.lib;SpinVideoC_v140.lib;SpinVideoCd_v140.lib;SpinVideo_v140.lib;SpinVideod_v140.lib;opencv_world4100.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Spinnaker_v140.lib;SpinnakerC_v140.lib;SpinnakerGUI_WPF_v140.lib;SpinnakerGUISelector_WPF_v140.lib;SpinUpdate_v140.lib;SpinVideoC_v140.lib;SpinVideo_v140.lib;opencv_world4100.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ClCompile>
       <AdditionalIncludeDirectories>.\include</AdditionalIncludeDirectories>

@@ -22,6 +22,7 @@ void showMenu(Config _config) {
         << " Hz)" << endl;
     cout << "2. 连续定时采集 (每次采集张数默认为一半）" << endl;
     cout << "3. 退出程序" << endl;
+
     cout << "请选择操作: ";
 }
 
