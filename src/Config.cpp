@@ -26,11 +26,14 @@ bool Config::load_config(const string& config_file) {
         file_path = _json_config["file_path"];
         chosen_trigger = _json_config["chosen_trigger"];
         exposure_time = _json_config["exposure_time"];
+        Use_WIFI_Trigger = _json_config ["Use_WIFI_Trigger"];
         serial_port = _json_config["serial_port"];
         baud_rate = _json_config["baud_rate"];
         chosen_operation = _json_config["chosen_operation"];
+
         left_camera_id = _json_config["left_camera_id"];
         right_camera_id = _json_config["right_camera_id"];
+
         Calibration_image_number = _json_config["Calibration_image_number"];
         Acquisition_image_number = _json_config["Acquisition_image_number"];
 

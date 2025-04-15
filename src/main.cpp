@@ -39,18 +39,21 @@ int main(int /*argc*/, char** /*argv*/) {
         }
 
         // 读取配置文件
-        Config config("E:\\New_Flir_Camera\\config\\config.json");
-        if (!config.load_config("E:\\New_Flir_Camera\\config\\config.json")) {
+        Config config(".\\config\\config.json");
+        if (!config.load_config(".\\config\\config.json")) {
             cout << "加载配置文件失败" << endl;
             std::system("pause");
             return -1;
         }
 
-        SerialPort serialPort(config.serial_port, config.baud_rate);
-        serialPort.sendFrequency(0);
-        string respone = serialPort.readData();
-        cout << respone << endl;
-        serialPort.release();
+        if (!config.Use_WIFI_Trigger) {
+            cout << config.Use_WIFI_Trigger << endl;
+            SerialPort serialPort(config.serial_port, config.baud_rate);
+            serialPort.sendFrequency(0);
+            string respone = serialPort.readData();
+            cout << respone << endl;
+            serialPort.release();
+        }
 
         //初始化相机
         CameraController cameraController(config);

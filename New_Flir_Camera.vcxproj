@@ -28,22 +28,24 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -70,12 +72,12 @@
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>E:\Third-party lib\json-develop\single_include;D:\spinnaker\include;E:\Third-party lib\opencv\include\opencv2;E:\Third-party lib\opencv\include\opencv;E:\Third-party lib\opencv\include;E:\Third-party lib\opencv;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\spinnaker\lib64;E:\Third-party lib\opencv\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>.\3rdlibs\OpenCV_4_10_withNonFree\include;.\3rdlibs\Spinnaker_small\include;.\3rdlibs\nlohmann_json\include</IncludePath>
+    <LibraryPath>.\3rdlibs\Spinnaker_small\lib64\vs2015;.\3rdlibs\OpenCV_4_10_withNonFree\x64\vc17\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>E:\boost_1_84_0\boost;E:\Third-party lib\json-develop\single_include;D:\spinnaker\include;E:\Third-party lib\opencv\include\opencv2;E:\Third-party lib\opencv\include\opencv;E:\Third-party lib\opencv\include;E:\Third-party lib\opencv;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\boost_1_84_0\libs;D:\spinnaker\lib64\vs2015;E:\Third-party lib\opencv\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>.\3rdlibs\OpenCV_4_10_withNonFree\include;.\3rdlibs\Spinnaker_small\include;.\3rdlibs\nlohmann_json\include</IncludePath>
+    <LibraryPath>.\3rdlibs\Spinnaker_small\lib64\vs2015;.\3rdlibs\OpenCV_4_10_withNonFree\x64\vc17\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -108,21 +110,10 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Link>
-      <AdditionalDependencies>Spinnaker_v140.lib;
-Spinnakerd_v140.lib;
-SpinnakerC_v140.lib
-;SpinnakerCd_v140.lib
-;SpinnakerGUI_WPF_v140.lib
-;SpinnakerGUI_WPFd_v140.lib;
-SpinnakerGUISelector_WPF_v140.lib;
-SpinUpdate_v140.lib;
-SpinVideoC_v140.lib
-;SpinVideoCd_v140.lib;
-SpinVideo_v140.lib
-;SpinVideod_v140.lib;opencv_aruco345.lib;opencv_bgsegm345.lib;opencv_bioinspired345.lib;opencv_calib3d345.lib;opencv_ccalib345.lib;opencv_core345.lib;opencv_datasets345.lib;opencv_dnn_objdetect345.lib;opencv_dnn345.lib;opencv_dpm345.lib;opencv_face345.lib;opencv_features2d345.lib;opencv_flann345.lib;opencv_fuzzy345.lib;opencv_hfs345.lib;opencv_highgui345.lib;opencv_img_hash345.lib;opencv_imgcodecs345.lib;opencv_imgproc345.lib;opencv_line_descriptor345.lib;opencv_ml345.lib;opencv_objdetect345.lib;opencv_optflow345.lib;opencv_phase_unwrapping345.lib;opencv_photo345.lib;opencv_plot345.lib;opencv_reg345.lib;opencv_rgbd345.lib;opencv_saliency345.lib;opencv_shape345.lib;opencv_stereo345.lib;opencv_stitching345.lib;opencv_structured_light345.lib;opencv_superres345.lib;opencv_surface_matching345.lib;opencv_text345.lib;opencv_tracking345.lib;opencv_video345.lib;opencv_videoio345.lib;opencv_videostab345.lib;opencv_xfeatures2d345.lib;opencv_ximgproc345.lib;opencv_xobjdetect345.lib;opencv_xphoto345.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Spinnaker_v140.lib;Spinnakerd_v140.lib;SpinnakerC_v140.lib;SpinnakerCd_v140.lib;SpinnakerGUI_WPF_v140.lib;SpinnakerGUI_WPFd_v140.lib;SpinnakerGUISelector_WPF_v140.lib;SpinUpdate_v140.lib;SpinVideoC_v140.lib;SpinVideoCd_v140.lib;SpinVideo_v140.lib;SpinVideod_v140.lib;opencv_world4100.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ClCompile>
-      <AdditionalIncludeDirectories>E:\boost_1_84_0\boost;E:\boost_1_84_0;E:\New_Flir_Camera\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <OpenMPSupport>true</OpenMPSupport>
@@ -132,9 +123,13 @@ SpinVideo_v140.lib
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>E:\New_Flir_Camera\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies>opencv_world4100d.lib;SpinnakerCd_v140.lib;SpinnakerGUI_WPFd_v140.lib;SpinVideoCd_v140.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\CameraController.cpp" />
@@ -143,7 +138,6 @@ SpinVideo_v140.lib
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\SerialPort.cpp" />
     <ClCompile Include="src\TCPClient.cpp" />
-    <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\CameraController.h" />

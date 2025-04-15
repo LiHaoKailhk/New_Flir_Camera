@@ -50,7 +50,7 @@ bool ImageAcquisition::SingleAcquisitionByTrigger(CameraPtr pCam, ImagePtr& pRes
             pCam->TriggerSoftware.Execute();
         } else {
             // 如果不是软触发模式，直接返回false
-            std::cout << "HEARD TRIGGER" << endl;
+            //std::cout << "HEARD TRIGGER" << endl;
         }
 
         // 获取下一帧图像
@@ -69,14 +69,20 @@ bool ImageAcquisition::SingleAcquisition_RAM(CameraPtr pCam)
     try {
         // 获取相机序列号，判断左右相机
         string cameraType ;
-        if (pCam->DeviceSerialNumber.GetValue() == _config.left_camera_id) {
+        gcstring cameraSerialNumberGc = pCam->DeviceSerialNumber.GetValue();
+        std::string cameraSerialNumber(cameraSerialNumberGc.c_str());
+
+        if (cameraSerialNumber == _config.left_camera_id) {
             cameraType = "Left";
-        } else if (pCam->DeviceSerialNumber.GetValue() == _config.right_camera_id) {
+        } else if (cameraSerialNumber == _config.right_camera_id) {
             cameraType = "Right";
         } else {
             std::cout << "相机序列号不匹配" << endl;
             return false;
         }
+
+        // 创建一个 ImageProcessor 对象，用于图像转换，这是新版的改动
+        ImageProcessor imageProcessor;
 
         // 开始计时
         clock_t start_time = clock();
@@ -109,7 +115,11 @@ bool ImageAcquisition::SingleAcquisition_RAM(CameraPtr pCam)
             // 转换并保存图像
             const size_t width = pResultImage->GetWidth();
             const size_t height = pResultImage->GetHeight();
-            ImagePtr grayImage = pResultImage->Convert(PixelFormat_Mono8);
+            /*ImagePtr grayImage = pResultImage->Convert(PixelFormat_Mono8);*/
+
+            // 使用 ImageProcessor 的 Convert 方法进行图像格式转换
+            ImagePtr grayImage = imageProcessor.Convert(pResultImage, PixelFormat_Mono8);
+
             Mat image = Mat(height, width, CV_8UC1, grayImage->GetData()).clone();
 
             if (cameraType == "Left") {
@@ -150,6 +160,14 @@ bool ImageAcquisition::MultipleAcquisition(CameraList cameras)
             // 服务器IP和端口需与服务端（比如Pico端）设置一致
             client = new TCPClient("192.168.42.1", 4242);
             client->connectToServer();
+            client->sendData("0");
+            std::string response = client->receiveData();
+            if (!response.empty()) {
+                std::cout << "Server responded: " << response << std::endl;
+            }
+            else {
+                std::cout << "No response from server." << std::endl;
+            }
         }
         else {
             // 使用有线串口进行通信
@@ -157,6 +175,8 @@ bool ImageAcquisition::MultipleAcquisition(CameraList cameras)
             serialPort->sendFrequency(0);
             Sleep(500);
         }
+
+
 
         string result;
 
@@ -168,7 +188,7 @@ bool ImageAcquisition::MultipleAcquisition(CameraList cameras)
                 SingleAcquisition_RAM(cameras.GetByIndex(i));
             }
             else {
-                Sleep(1000);            //要等待前两个相机的初始化
+                Sleep(500);            //要等待前两个相机的初始化
                 if (!_config.Use_WIFI_Trigger & serialPort != nullptr) {
                     if (_config.chosen_operation == "Calibration") {
                         serialPort->sendFrequency(_config.Calibration_Hz); // 发送2Hz的频率
@@ -187,7 +207,9 @@ bool ImageAcquisition::MultipleAcquisition(CameraList cameras)
                     else if (_config.chosen_operation == "Acquisition") {
                         client->sendData(to_string(_config.Acquisition_Hz)); // 发送50Hz的频率
                     }
+                    cout << "send! " << endl;
                     std::string response = client->receiveData();
+                    cout << "response " << endl;
                     if (!response.empty()) {
                         std::cout << "Server responded: " << response << std::endl;
                     }
@@ -302,17 +324,19 @@ void ImageAcquisition::saveImageToDisk() {
     string number = to_string(_image_number);
     string folder_name;
     if (_config.chosen_operation == "Calibration") {
-        folder_name = _config.file_path + "Calibration/" + date + "-" + time;
+        folder_name = _config.file_path + "/Calibration/" + date + "-" + time;
     } else if (_config.chosen_operation == "Acquisition") {
-        folder_name = _config.file_path + "Acquisition/" + date + "-" + time + "-" + number;
+        folder_name = _config.file_path + "/Acquisition/" + date + "-" + time + "-" + number;
     }
-    mkdir(folder_name.c_str());
+    //mkdir(folder_name.c_str());
+    cout << folder_name.c_str() << endl;
+    filesystem::create_directories(folder_name.c_str());
 
     // 创建文件夹CameraL和CameraR
     string cameraL_folder = folder_name + "/CameraL";
     string cameraR_folder = folder_name + "/CameraR";
-    mkdir(cameraL_folder.c_str());
-    mkdir(cameraR_folder.c_str());
+    filesystem::create_directories(cameraL_folder.c_str());
+    filesystem::create_directories(cameraR_folder.c_str());
 
 
     for (int i = 0; i < _leftImages.size(); i++) {

@@ -51,7 +51,7 @@ std::string TCPClient::receiveData() {
     char buffer[1024] = { 0 };
     unsigned long startTime = GetTickCount();
     int result = 0;
-    while ((GetTickCount() - startTime) < 5000) {  // 超时5秒
+    while ((GetTickCount() - startTime) < 100) {  // 超时5秒
         result = recv(clientSocket, buffer, sizeof(buffer) - 1, 0);  // 留一位存放'\0'
         if (result > 0) {
             buffer[result] = '\0';
